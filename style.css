@@ -23,6 +23,9 @@ body {
     height: 80px;
     border: 1px solid black;
     margin-bottom: 20px;
+    font-size: 60px;
+    display: flex;
+    align-items: center;
 }
 
 .calculator-buttons-container
