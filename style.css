@@ -1,4 +1,24 @@
 body {
     margin: 0;
     box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.calculator-container
+{
+    width: 400px;
+    height: 600px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.calculator-display
+{
+    width: 380px;
+    height: 80px;
+    border: 1px solid black;
 }
