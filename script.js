@@ -93,6 +93,7 @@ buttonsContainer.addEventListener("click", (event) => {
             display.textContent = operate(previousOperator, previousResult, operand2);
             return;
         }
+
         operand2 = display.textContent;
         display.textContent = operate(operator, operand1, operand2);
         operand1 = display.textContent;
@@ -104,6 +105,7 @@ buttonsContainer.addEventListener("click", (event) => {
     // Operator entered
     else if(operators.includes(event.target.value))
     {
+
         if(!operator) // If no operator has been entered yet, proceed. Otherwise, don't overwrite the previous operand value. Just assign the new operator
         {
             operand1 = display.textContent;
