@@ -1,6 +1,9 @@
 // Declare variables
 let operand1;
+let operand2;
 let operator;
+let previousOperator;
+let previousInput;
 
 let display = document.querySelector(".calculator-display");
 display.textContent = "";
@@ -78,25 +81,41 @@ buttonsContainer.addEventListener("click", (event) => {
         clearDisplay();
         operand1 = "";
         operator = "";
+        operand2 = "";
+        previousOperator = "";
     }
     else if(event.target.value === "=")
     {
-        display.textContent = operate(operator, operand1, display.textContent);
+        if (previousInput === "=")
+        {
+            // User is clicking = multiple times
+            let previousResult = display.textContent;
+            display.textContent = operate(previousOperator, previousResult, operand2);
+            return;
+        }
+        operand2 = display.textContent;
+        display.textContent = operate(operator, operand1, operand2);
         operand1 = display.textContent;
+        previousOperator = operator;
         operator = "";
+        previousInput = "=";
+
     }
     // Operator entered
     else if(operators.includes(event.target.value))
     {
+        previousInput = "";
         if(!operator) // If no operator has been entered yet, proceed. Otherwise, don't overwrite the previous operand value. Just assign the new operator
         {
             operand1 = display.textContent;
+            operand2 = "";
         }
         operator = event.target.value;
         clearDisplay();
     }
     else
     {
+        previousInput = "";
         addCharToDisplay(event.target.value);
     }
 });
