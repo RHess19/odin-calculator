@@ -104,17 +104,21 @@ buttonsContainer.addEventListener("click", (event) => {
     // Operator entered
     else if(operators.includes(event.target.value))
     {
-        previousInput = "";
         if(!operator) // If no operator has been entered yet, proceed. Otherwise, don't overwrite the previous operand value. Just assign the new operator
         {
             operand1 = display.textContent;
             operand2 = "";
         }
+
         operator = event.target.value;
         clearDisplay();
     }
     else
     {
+        if(previousInput === "=")
+        {
+            clearDisplay(); // Clear if pressing a number after =
+        }
         previousInput = "";
         addCharToDisplay(event.target.value);
     }
