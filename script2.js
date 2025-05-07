@@ -111,6 +111,12 @@ buttonsContainer.addEventListener("click", (event) => {
     }
     else if(event.target.value === "=")
     {
+        if(operator === "")
+        {
+            // Do nothing if they just entered a number and hit enter
+            return;
+        }
+
         if(operand1 !== "" && operator !== "" && operand2 !== "")
         {
             operand1 = result;
@@ -141,10 +147,11 @@ buttonsContainer.addEventListener("click", (event) => {
     // Number or decimal
     else
     {
-        if(result === "")
+        if(result === "") // Reset after reaching the bottom of the = conditional
         {
             clearDisplay();
         }
+
         if(chaining == true)
         {
             clearDisplay();
