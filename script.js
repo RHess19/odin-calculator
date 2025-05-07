@@ -3,28 +3,25 @@ let operand1;
 let operand2;
 let operator;
 
-let expressionValue = "";
-let calculatorDisplay = document.querySelector(".calculator-display");
-calculatorDisplay.textContent = expressionValue;
-
-let operationsStack = [];
-let operatorsStack = [];
+let display = document.querySelector(".calculator-display");
+display.textContent = "";
 
 // Basic operation functions
 function add(a, b) {
-    return Number(a) + Number(b);
+    return (Number(a) + Number(b));
 }
 
 function subtract(a, b) {
-    return Number(a) - Number(b);
+    console.log(`result: ${Number(a)-Number(b)}`);
+    return (Number(a) - Number(b));
 }
 
 function multiply(a, b) {
-    return Number(a) * Number(b);
+    return (Number(a) * Number(b));
 }
 
 function divide(a, b) {
-    return Number(a) / Number(b);
+    return (Number(a) / Number(b));
 }
 
 
@@ -35,31 +32,19 @@ function operate(operator, operand1, operand2) {
     let display = document.querySelector(".calculator-display");
     switch (operator) {
         case '+':
-            display.textContent = add(operand1, operand2);
-            operand1 = "";
-            operand2 = "";
-            operator = "";
+            return add(operand1, operand2);
             break;
 
         case '-':
-            display.textContent = subtract(operand1, operand2);
-            operand1 = "";
-            operand2 = "";
-            operator = "";
+            return subtract(operand1, operand2);
             break;
 
         case 'X':
-            display.textContent = multiply(operand1, operand2);
-            operand1 = "";
-            operand2 = "";
-            operator = "";
+            return multiply(operand1, operand2);
             break;
 
         case '/':
-            display.textContent = divide(operand1, operand2);
-            operand1 = "";
-            operand2 = "";
-            operator = "";
+            return divide(operand1, operand2);
             break;
     }
 }
@@ -67,16 +52,15 @@ function operate(operator, operand1, operand2) {
 
 // Add a character to the calculator's display
 function addCharToDisplay(char) {
-    let display = document.querySelector(".calculator-display");
     display.textContent += char;
-    expressionValue += char;
 }
 
 // Clear display
 function clearDisplay() {
-    let display = document.querySelector(".calculator-display");
     display.textContent = "";
-    expressionValue = "";
+    operand1 = "";
+    operand2 = "";
+    operator = "";
 }
 
 
@@ -86,57 +70,62 @@ function clearDisplay() {
 const buttonsContainer = document.querySelector(".calculator-buttons-container");
 
 buttonsContainer.addEventListener("click", (event) => {
-    console.log(`Operand1 = ${operand1}\nOperand2 = ${operand2}\nOperator = ${operator}`);
-    if(event.target.className == "calculator-buttons-container")
+    console.log(event);
+    if(event.target.className === "calculator-buttons-container")
     {
         return;
     }
 
-    let operators = ["=", "CLEAR", "+", "-", "X", "/"];
-    if (!(operators.includes(event.target.value))) {
-        if(operand1 !== "" && operator !== "")
+    let operators = ["+", "-", "X", "/"];
+
+    if(event.target.value === "CLEAR")
+    {
+        clearDisplay();
+    }
+    else if(event.target.value === "=")
+    {
+        // Begin by assigning the current display value to operand2
+        operand2 = display.textContent;
+        console.log(`operand2: ${operand2}`);
+
+        switch (operator) {
+            case "+":
+                display.textContent = operate("+", operand1, operand2);
+                break;
+            
+            case "-":
+                display.textContent = operate('-', operand1, operand2);
+                break;
+
+            case "X":
+                display.textContent = operate("X", operand1, operand2);
+                break;
+
+            case "/":
+                display.textContent = operate("/", operand1, operand2);
+                break;
+        
+            default:
+                break;
+        }
+    }
+    else if(operators.includes(event.target.value))
+    {
+        console.log(`event.target.value = ${event.target.value}`);
+        // Four operators
+        // When an operator is read, assign the current display value to operand1
+        // Assign the operator to operator
+        operand1 = display.textContent;
+        operator = event.target.value;
+        console.log(`operand1: ${operand1}`);
+        console.log(`operator: ${operator}`);
+    }
+    else
+    {
+        if(operand1)
         {
             clearDisplay();
         }
-
         addCharToDisplay(event.target.value);
-    }
-    else if (operators.includes(event.target.value)) {
-        switch (event.target.value) {
-            case "CLEAR":
-                clearDisplay();
-                break;
-
-            case "=":
-                // Only run if there is an operand1 and operator set
-                // Record current expressionValue as operand2
-                // operate()
-                if(operand1 !== "" && operator !== "")
-                {
-                    operand2 = expressionValue;
-                    operate(operator, operand1, operand2);
-                    operand1 = "";
-                    operand2 = "";
-                    operator = "";
-                }
-                break;
-
-            case "+":
-            case "-":
-            case "X":
-            case "/":
-                if(expressionValue === "")
-                {
-                    break;
-                }
-
-                // Record current expressionValue as operand1
-                // Record operator
-                // Reset expressionValue
-                operand1 = expressionValue;
-                operator = event.target.value;
-                expressionValue = "";
-                break;
-        }
     }
 });
