@@ -1,52 +1,140 @@
-// Declare expression variables
+// Declare variables
 let operand1;
 let operand2;
 let operator;
 
+let expressionValue = "";
+let calculatorDisplay = document.querySelector(".calculator-display");
+calculatorDisplay.textContent = expressionValue;
+
 // Basic operation functions
-function add(a, b)
-{
-    return a+b;
+function add(a, b) {
+    return Number(a) + Number(b);
 }
 
-function subtract(a, b)
-{
-    return a-b;
+function subtract(a, b) {
+    return a - b;
 }
 
-function multiply(a, b)
-{
-    return a*b;
+function multiply(a, b) {
+    return a * b;
 }
 
-function divide(a, b)
-{
-    return a/b;
+function divide(a, b) {
+    return a / b;
 }
 
 
 
 
 // Main operation function
-function operate(operator, operand1, operand2)
-{
+function operate(operator, operand1, operand2) {
+    let display = document.querySelector(".calculator-display");
     switch (operator) {
         case '+':
-            return add(operand1, operand2);
+            display.textContent = add(operand1, operand2);
+            operand1 = "";
+            operand2 = "";
+            operator = "";
             break;
 
         case '-':
-            return subtract(operand1, operand2);
+            display.textContent = subtract(operand1, operand2);
+            operand1 = "";
+            operand2 = "";
+            operator = "";
             break;
 
-        case '*':
-            return multiply(operand1, operand2);
+        case 'X':
+            display.textContent = multiply(operand1, operand2);
+            operand1 = "";
+            operand2 = "";
+            operator = "";
             break;
 
         case '/':
-            return divide(operand1, operand2);
+            display.textContent = divide(operand1, operand2);
+            operand1 = "";
+            operand2 = "";
+            operator = "";
             break;
     }
 }
 
 
+// Add a character to the calculator's display
+function addCharToDisplay(char) {
+    let display = document.querySelector(".calculator-display");
+    
+    // Ensure previous input is cleared if user entered incorrect expression format previously
+    if(operand1 == "" && operator == "" && operand2 == "")
+    {
+        clearDisplay();
+    }
+    display.textContent += char;
+    expressionValue += char;
+}
+
+// Clear display
+function clearDisplay() {
+    let display = document.querySelector(".calculator-display");
+    display.textContent = "";
+    expressionValue = "";
+}
+
+
+
+
+// Event listeners via delegation
+const buttonsContainer = document.querySelector(".calculator-buttons-container");
+
+buttonsContainer.addEventListener("click", (event) => {
+    console.log(event);
+    if(event.target.className == "calculator-buttons-container")
+    {
+        return;
+    }
+
+    let operators = ["=", "CLEAR", "+", "-", "X", "/"];
+    if (!(operators.includes(event.target.value))) {
+        if(operand1 !== "" && operator !== "")
+        {
+            clearDisplay();
+        }
+
+        addCharToDisplay(event.target.value);
+    }
+    else if (operators.includes(event.target.value)) {
+        switch (event.target.value) {
+            case "CLEAR":
+                clearDisplay();
+                break;
+
+            case "=":
+                // Only run if there is an operand1 and operator set
+                // Record current expressionValue as operand2
+                // operate()
+                if(operand1 !== "" && operator !== "")
+                {
+                    operand2 = expressionValue;
+                    operate(operator, operand1, operand2);
+                    operand1 = "";
+                    operand2 = "";
+                    operator = "";
+                }
+                break;
+
+            case "+":
+            case "-":
+            case "X":
+            case "/":
+                // Record current expressionValue as operand1
+                // Record operator
+                // Reset expressionValue
+                operand1 = expressionValue;
+                operator = event.target.value;
+                expressionValue = "";
+                break;
+        }
+    }
+});
