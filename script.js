@@ -7,6 +7,7 @@ let expressionValue = "";
 let calculatorDisplay = document.querySelector(".calculator-display");
 calculatorDisplay.textContent = expressionValue;
 
+// Stacks
 let operationsStack = [];
 let operatorsStack = [];
 
@@ -86,57 +87,5 @@ function clearDisplay() {
 const buttonsContainer = document.querySelector(".calculator-buttons-container");
 
 buttonsContainer.addEventListener("click", (event) => {
-    console.log(`Operand1 = ${operand1}\nOperand2 = ${operand2}\nOperator = ${operator}`);
-    if(event.target.className == "calculator-buttons-container")
-    {
-        return;
-    }
-
-    let operators = ["=", "CLEAR", "+", "-", "X", "/"];
-    if (!(operators.includes(event.target.value))) {
-        if(operand1 !== "" && operator !== "")
-        {
-            clearDisplay();
-        }
-
-        addCharToDisplay(event.target.value);
-    }
-    else if (operators.includes(event.target.value)) {
-        switch (event.target.value) {
-            case "CLEAR":
-                clearDisplay();
-                break;
-
-            case "=":
-                // Only run if there is an operand1 and operator set
-                // Record current expressionValue as operand2
-                // operate()
-                if(operand1 !== "" && operator !== "")
-                {
-                    operand2 = expressionValue;
-                    operate(operator, operand1, operand2);
-                    operand1 = "";
-                    operand2 = "";
-                    operator = "";
-                }
-                break;
-
-            case "+":
-            case "-":
-            case "X":
-            case "/":
-                if(expressionValue === "")
-                {
-                    break;
-                }
-
-                // Record current expressionValue as operand1
-                // Record operator
-                // Reset expressionValue
-                operand1 = expressionValue;
-                operator = event.target.value;
-                expressionValue = "";
-                break;
-        }
-    }
+    
 });
