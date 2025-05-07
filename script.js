@@ -1,6 +1,5 @@
 // Declare variables
 let operand1;
-let operand2;
 let operator;
 
 let display = document.querySelector(".calculator-display");
@@ -83,6 +82,8 @@ buttonsContainer.addEventListener("click", (event) => {
     else if(event.target.value === "=")
     {
         display.textContent = operate(operator, operand1, display.textContent);
+        operand1 = display.textContent;
+        operator = "";
     }
     // Operator entered
     else if(operators.includes(event.target.value))
