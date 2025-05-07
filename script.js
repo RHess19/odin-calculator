@@ -7,21 +7,24 @@ let expressionValue = "";
 let calculatorDisplay = document.querySelector(".calculator-display");
 calculatorDisplay.textContent = expressionValue;
 
+let operationsStack = [];
+let operatorsStack = [];
+
 // Basic operation functions
 function add(a, b) {
     return Number(a) + Number(b);
 }
 
 function subtract(a, b) {
-    return a - b;
+    return Number(a) - Number(b);
 }
 
 function multiply(a, b) {
-    return a * b;
+    return Number(a) * Number(b);
 }
 
 function divide(a, b) {
-    return a / b;
+    return Number(a) / Number(b);
 }
 
 
@@ -65,12 +68,6 @@ function operate(operator, operand1, operand2) {
 // Add a character to the calculator's display
 function addCharToDisplay(char) {
     let display = document.querySelector(".calculator-display");
-    
-    // Ensure previous input is cleared if user entered incorrect expression format previously
-    if(operand1 == "" && operator == "" && operand2 == "")
-    {
-        clearDisplay();
-    }
     display.textContent += char;
     expressionValue += char;
 }
@@ -89,7 +86,7 @@ function clearDisplay() {
 const buttonsContainer = document.querySelector(".calculator-buttons-container");
 
 buttonsContainer.addEventListener("click", (event) => {
-    console.log(event);
+    console.log(`Operand1 = ${operand1}\nOperand2 = ${operand2}\nOperator = ${operator}`);
     if(event.target.className == "calculator-buttons-container")
     {
         return;
@@ -128,6 +125,11 @@ buttonsContainer.addEventListener("click", (event) => {
             case "-":
             case "X":
             case "/":
+                if(expressionValue === "")
+                {
+                    break;
+                }
+
                 // Record current expressionValue as operand1
                 // Record operator
                 // Reset expressionValue
