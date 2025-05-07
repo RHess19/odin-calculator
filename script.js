@@ -29,7 +29,6 @@ function divide(a, b) {
 
 // Main operation function
 function operate(operator, operand1, operand2) {
-    let display = document.querySelector(".calculator-display");
     switch (operator) {
         case '+':
             return add(operand1, operand2);
@@ -58,9 +57,6 @@ function addCharToDisplay(char) {
 // Clear display
 function clearDisplay() {
     display.textContent = "";
-    operand1 = "";
-    operand2 = "";
-    operator = "";
 }
 
 
@@ -81,51 +77,25 @@ buttonsContainer.addEventListener("click", (event) => {
     if(event.target.value === "CLEAR")
     {
         clearDisplay();
+        operand1 = "";
+        operator = "";
     }
     else if(event.target.value === "=")
     {
-        // Begin by assigning the current display value to operand2
-        operand2 = display.textContent;
-        console.log(`operand2: ${operand2}`);
-
-        switch (operator) {
-            case "+":
-                display.textContent = operate("+", operand1, operand2);
-                break;
-            
-            case "-":
-                display.textContent = operate('-', operand1, operand2);
-                break;
-
-            case "X":
-                display.textContent = operate("X", operand1, operand2);
-                break;
-
-            case "/":
-                display.textContent = operate("/", operand1, operand2);
-                break;
-        
-            default:
-                break;
-        }
+        display.textContent = operate(operator, operand1, display.textContent);
     }
+    // Operator entered
     else if(operators.includes(event.target.value))
     {
-        console.log(`event.target.value = ${event.target.value}`);
-        // Four operators
-        // When an operator is read, assign the current display value to operand1
-        // Assign the operator to operator
-        operand1 = display.textContent;
+        if(!operator) // If no operator has been entered yet, proceed. Otherwise, don't overwrite the previous operand value. Just assign the new operator
+        {
+            operand1 = display.textContent;
+        }
         operator = event.target.value;
-        console.log(`operand1: ${operand1}`);
-        console.log(`operator: ${operator}`);
+        clearDisplay();
     }
     else
     {
-        if(operand1)
-        {
-            clearDisplay();
-        }
         addCharToDisplay(event.target.value);
     }
 });
