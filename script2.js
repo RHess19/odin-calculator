@@ -7,6 +7,9 @@ let display = document.querySelector(".calculator-display");
 display.textContent = "";
 let chaining;
 let equals; // True if equals was just pressed - keeps the screen from clearing when entering multidigit numbers
+let message = document.querySelector(".message-container"); // Document element for displaying error messages
+let cleared;
+let charPressed;
 
 // Basic operation functions
 function add(a, b)
@@ -87,6 +90,13 @@ buttonsContainer.addEventListener("click", (event) => {
     // Operator
     else if(event.target.value === "+" || event.target.value === "-" || event.target.value === "X" || event.target.value === "/")
     {
+        if(!charPressed) // If no characters entered since the last operator entered...
+        {
+            operator = event.target.value;
+            charPressed = false;
+            return;
+        }
+        
         if(operand1 !== "" && operator !== "" && operand2 !== "")
         {
             operand1 = result;
@@ -94,6 +104,8 @@ buttonsContainer.addEventListener("click", (event) => {
             result = operate(operator, operand1, operand2);
             operator = event.target.value;
             display.textContent = result;
+            chaining = true;
+            cleared = false;
         } else if(operand1 !== "" && operator !== "")
         {
             operand2 = display.textContent;
@@ -101,12 +113,14 @@ buttonsContainer.addEventListener("click", (event) => {
             operator = event.target.value;
             display.textContent = result;
             chaining = true;
+            cleared = false;
         }
         else
         {
             operand1 = display.textContent;
             operator = event.target.value;
             clearDisplay();
+            cleared = false;
         }
 
         
@@ -150,19 +164,23 @@ buttonsContainer.addEventListener("click", (event) => {
     // Number or decimal
     else
     {
+        charPressed = true; // Keep track of when something othan than an operator is pressed - detects pressing multiple operators in a row without calculating anything
         if(equals === true) // Reset after reaching the bottom of the = conditional
         {
             clearDisplay();
-        }
-
-        if(chaining == true)
-        {
-            clearDisplay();
+            message = "";
             addCharToDisplay(event.target.value);
-        }
-        else
+            return;
+        } else if(chaining == true)
         {
+            if(!cleared) // Only clear the display on the FIRST time after an operator is pressed while chaining expressions
+            {
+                clearDisplay();
+                cleared = true;
+            }
             addCharToDisplay(event.target.value);
+            return;
         }
+            addCharToDisplay(event.target.value);
     }
 });
