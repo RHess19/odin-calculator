@@ -64,24 +64,22 @@ function addCharToDisplay(char)
 function clearDisplay()
 {
     display.textContent = "";
+    message = "";
 }
 
-function roundResult()
-{
+function roundResult() {
     if(display.textContent.length > 12)
     {
         display.textContent = display.textContent.slice(0, 12);
-        message = "Result longer than 12 characters. Result has been truncated to 12 characters.";
     }
 }
-
-
 
 
 // Button event lister via event delegation
 const buttonsContainer = document.querySelector(".calculator-buttons-container");
 
 buttonsContainer.addEventListener("click", (event) => {
+
     // Prevent from triggering on the container
     if(event.target.className === "calculator-buttons-container")
     {
@@ -100,8 +98,10 @@ buttonsContainer.addEventListener("click", (event) => {
     // Operator
     else if(event.target.value === "+" || event.target.value === "-" || event.target.value === "X" || event.target.value === "/")
     {
+        roundResult();
         if(lastInput === "+" || lastInput === "-" || lastInput === "X" || lastInput === "/") // Prevent pressing multiple operators in a row from resetting the calculation. Instead, store the new operator and wait until a nubmer is entered
         {
+        
             operator = event.target.value;
             return;
         }
@@ -144,7 +144,7 @@ buttonsContainer.addEventListener("click", (event) => {
             lastInput = event.target.value;
         }
 
-        
+    
     }
     else if(event.target.value === "=")
     {
@@ -160,6 +160,7 @@ buttonsContainer.addEventListener("click", (event) => {
             operand2 = display.textContent;
             result = operate(operator, operand1, operand2);
             display.textContent = result;
+            roundResult();
             operand1 = "";
             operand2 = "";
             operator = "";
@@ -172,6 +173,8 @@ buttonsContainer.addEventListener("click", (event) => {
         operand2 = display.textContent;
         result = operate(operator, operand1, operand2);
         display.textContent = result;
+        roundResult();
+    
 
         // Reset all calculation values for the next calculation
         operand1 = "";
@@ -185,6 +188,11 @@ buttonsContainer.addEventListener("click", (event) => {
     // Number or decimal
     else
     {
+        if(display.textContent.length >= 12)
+        {
+            return;
+        }
+
         lastInput = "";
         charPressed = true; // Keep track of when something othan than an operator is pressed - detects pressing multiple operators in a row without calculating anything
         if(equals === true) // Reset after reaching the bottom of the = conditional
@@ -196,6 +204,7 @@ buttonsContainer.addEventListener("click", (event) => {
             }
             message = "";
             addCharToDisplay(event.target.value);
+        
             return;
         } else if(chaining == true)
         {
@@ -205,6 +214,7 @@ buttonsContainer.addEventListener("click", (event) => {
                 cleared = true;
             }
             addCharToDisplay(event.target.value);
+        
             return;
         }
             addCharToDisplay(event.target.value);
