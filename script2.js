@@ -68,9 +68,9 @@ function clearDisplay()
 }
 
 function roundResult() {
-    if(display.textContent.length > 12)
+    if(display.textContent.length >= 11)
     {
-        display.textContent = display.textContent.slice(0, 12);
+        display.textContent = display.textContent.slice(0, 11);
     }
 }
 
@@ -79,6 +79,11 @@ function roundResult() {
 const buttonsContainer = document.querySelector(".calculator-buttons-container");
 
 buttonsContainer.addEventListener("click", (event) => {
+    roundResult();
+    if(event.target.value === "." &&  display.textContent.indexOf(".") !== -1 && display.textContent !== "") // Do not allow multiple decimals in inputs
+    {
+        return;
+    }
 
     // Prevent from triggering on the container
     if(event.target.className === "calculator-buttons-container")
@@ -98,10 +103,8 @@ buttonsContainer.addEventListener("click", (event) => {
     // Operator
     else if(event.target.value === "+" || event.target.value === "-" || event.target.value === "X" || event.target.value === "/")
     {
-        roundResult();
         if(lastInput === "+" || lastInput === "-" || lastInput === "X" || lastInput === "/") // Prevent pressing multiple operators in a row from resetting the calculation. Instead, store the new operator and wait until a nubmer is entered
         {
-        
             operator = event.target.value;
             return;
         }
@@ -125,6 +128,7 @@ buttonsContainer.addEventListener("click", (event) => {
             chaining = true;
             cleared = false;
             lastInput = event.target.value;
+            roundResult();
         } else if(operand1 !== "" && operator !== "")
         {
             operand2 = display.textContent;
@@ -134,6 +138,7 @@ buttonsContainer.addEventListener("click", (event) => {
             chaining = true;
             cleared = false;
             lastInput = event.target.value;
+            roundResult();
         }
         else
         {
@@ -188,8 +193,9 @@ buttonsContainer.addEventListener("click", (event) => {
     // Number or decimal
     else
     {
-        if(display.textContent.length >= 12)
+        if(display.textContent.length > 12)
         {
+            display.textContent = display.textContent.slice(0, 12);
             return;
         }
 
