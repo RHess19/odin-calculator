@@ -11,6 +11,8 @@ let message = document.querySelector(".message-container"); // Document element 
 let cleared;
 let charPressed;
 let lastInput;
+// Mouse event lister via event delegation
+const buttonsContainer = document.querySelector(".calculator-buttons-container");
 
 // Basic operation functions
 function add(a, b)
@@ -74,161 +76,163 @@ function roundResult() {
     }
 }
 
-
-// Button event lister via event delegation
-const buttonsContainer = document.querySelector(".calculator-buttons-container");
-
-buttonsContainer.addEventListener("click", (event) => {
+// Process mouse clicks on buttons
+function processMouseClick(event) {
     // Prevent from triggering on the container
     if(event.target.className === "calculator-buttons-container")
-    {
-        return;
-    }
-    roundResult();
-    if(event.target.value === "." &&  display.textContent.indexOf(".") !== -1 && display.textContent !== "") // Do not allow multiple decimals in inputs
-    {
-        return;
-    }
-
-    if(event.target.value === "BACK"  && display.textContent.length !== 0)
-    {
-        display.textContent = display.textContent.slice(0, display.textContent.length-1)
-    }
-    else if(event.target.value === "CLEAR")
-    {
-        clearDisplay();
-        operand1 = "";
-        operand2 = "";
-        operator = "";
-        equals = false;
-    }
-    // Operator
-    else if(event.target.value === "+" || event.target.value === "-" || event.target.value === "X" || event.target.value === "/")
-    {
-        if(lastInput === "+" || lastInput === "-" || lastInput === "X" || lastInput === "/") // Prevent pressing multiple operators in a row from resetting the calculation. Instead, store the new operator and wait until a nubmer is entered
         {
-            operator = event.target.value;
             return;
         }
-
-
-        if(!charPressed) // If no characters entered since the last operator entered...
+        roundResult();
+        if(event.target.value === "." &&  display.textContent.indexOf(".") !== -1 && display.textContent !== "") // Do not allow multiple decimals in inputs
         {
-            operator = event.target.value;
-            charPressed = false;
-            lastInput = event.target.value;
             return;
         }
-        
-        if(operand1 !== "" && operator !== "" && operand2 !== "")
-        {
-            operand1 = result;
-            operand2 = display.textContent;
-            result = operate(operator, operand1, operand2);
-            operator = event.target.value;
-            display.textContent = result;
-            chaining = true;
-            cleared = false;
-            lastInput = event.target.value;
-            roundResult();
-        } else if(operand1 !== "" && operator !== "")
-        {
-            operand2 = display.textContent;
-            result = operate(operator, operand1, operand2);
-            operator = event.target.value;
-            display.textContent = result;
-            chaining = true;
-            cleared = false;
-            lastInput = event.target.value;
-            roundResult();
-        }
-        else
-        {
-            operand1 = display.textContent;
-            operator = event.target.value;
-            clearDisplay();
-            cleared = false;
-            lastInput = event.target.value;
-        }
-
     
-    }
-    else if(event.target.value === "=")
-    {
-        if(operator === "")
+        if(event.target.value === "BACK"  && display.textContent.length !== 0)
         {
-            // Do nothing if they just entered a number and hit enter
-            return;
+            display.textContent = display.textContent.slice(0, display.textContent.length-1)
         }
-
-        if(operand1 !== "" && operator !== "" && operand2 !== "")
+        else if(event.target.value === "CLEAR")
         {
-            operand1 = result;
+            clearDisplay();
+            operand1 = "";
+            operand2 = "";
+            operator = "";
+            equals = false;
+        }
+        // Operator
+        else if(event.target.value === "+" || event.target.value === "-" || event.target.value === "X" || event.target.value === "/")
+        {
+            if(lastInput === "+" || lastInput === "-" || lastInput === "X" || lastInput === "/") // Prevent pressing multiple operators in a row from resetting the calculation. Instead, store the new operator and wait until a nubmer is entered
+            {
+                operator = event.target.value;
+                return;
+            }
+    
+    
+            if(!charPressed) // If no characters entered since the last operator entered...
+            {
+                operator = event.target.value;
+                charPressed = false;
+                lastInput = event.target.value;
+                return;
+            }
+            
+            if(operand1 !== "" && operator !== "" && operand2 !== "")
+            {
+                operand1 = result;
+                operand2 = display.textContent;
+                result = operate(operator, operand1, operand2);
+                operator = event.target.value;
+                display.textContent = result;
+                chaining = true;
+                cleared = false;
+                lastInput = event.target.value;
+                roundResult();
+            } else if(operand1 !== "" && operator !== "")
+            {
+                operand2 = display.textContent;
+                result = operate(operator, operand1, operand2);
+                operator = event.target.value;
+                display.textContent = result;
+                chaining = true;
+                cleared = false;
+                lastInput = event.target.value;
+                roundResult();
+            }
+            else
+            {
+                operand1 = display.textContent;
+                operator = event.target.value;
+                clearDisplay();
+                cleared = false;
+                lastInput = event.target.value;
+            }
+    
+        
+        }
+        else if(event.target.value === "=")
+        {
+            if(operator === "")
+            {
+                // Do nothing if they just entered a number and hit enter
+                return;
+            }
+    
+            if(operand1 !== "" && operator !== "" && operand2 !== "")
+            {
+                operand1 = result;
+                operand2 = display.textContent;
+                result = operate(operator, operand1, operand2);
+                display.textContent = result;
+                roundResult();
+                operand1 = "";
+                operand2 = "";
+                operator = "";
+                operator2 = "";
+                chaining = "";
+                result = "";
+                return;
+            }
+    
             operand2 = display.textContent;
             result = operate(operator, operand1, operand2);
             display.textContent = result;
             roundResult();
+        
+    
+            // Reset all calculation values for the next calculation
             operand1 = "";
             operand2 = "";
             operator = "";
             operator2 = "";
             chaining = "";
             result = "";
-            return;
+            equals = true;
         }
-
-        operand2 = display.textContent;
-        result = operate(operator, operand1, operand2);
-        display.textContent = result;
-        roundResult();
+        // Number or decimal
+        else
+        {
+            if(event.target.value === "BACK")
+            {
+                return;
+            }
+            if(display.textContent.length > 12)
+            {
+                display.textContent = display.textContent.slice(0, 12);
+                return;
+            }
     
-
-        // Reset all calculation values for the next calculation
-        operand1 = "";
-        operand2 = "";
-        operator = "";
-        operator2 = "";
-        chaining = "";
-        result = "";
-        equals = true;
-    }
-    // Number or decimal
-    else
-    {
-        if(event.target.value === "BACK")
-        {
-            return;
-        }
-        if(display.textContent.length > 12)
-        {
-            display.textContent = display.textContent.slice(0, 12);
-            return;
-        }
-
-        lastInput = "";
-        charPressed = true; // Keep track of when something othan than an operator is pressed - detects pressing multiple operators in a row without calculating anything
-        if(equals === true) // Reset after reaching the bottom of the = conditional
-        {
-            if(!cleared) // Only clear the display on the FIRST time after an operator is pressed while chaining expressions
+            lastInput = "";
+            charPressed = true; // Keep track of when something othan than an operator is pressed - detects pressing multiple operators in a row without calculating anything
+            if(equals === true) // Reset after reaching the bottom of the = conditional
             {
-                clearDisplay();
-                cleared = true;
-            }
-            message = "";
-            addCharToDisplay(event.target.value);
-        
-            return;
-        } else if(chaining == true)
-        {
-            if(!cleared) // Only clear the display on the FIRST time after an operator is pressed while chaining expressions
+                if(!cleared) // Only clear the display on the FIRST time after an operator is pressed while chaining expressions
+                {
+                    clearDisplay();
+                    cleared = true;
+                }
+                message = "";
+                addCharToDisplay(event.target.value);
+            
+                return;
+            } else if(chaining == true)
             {
-                clearDisplay();
-                cleared = true;
+                if(!cleared) // Only clear the display on the FIRST time after an operator is pressed while chaining expressions
+                {
+                    clearDisplay();
+                    cleared = true;
+                }
+                addCharToDisplay(event.target.value);
+            
+                return;
             }
-            addCharToDisplay(event.target.value);
-        
-            return;
+                addCharToDisplay(event.target.value);
         }
-            addCharToDisplay(event.target.value);
-    }
+}
+
+// Event listener for mouse clicks via delegation
+buttonsContainer.addEventListener("click", (event) => {
+    processMouseClick(event);
 });
