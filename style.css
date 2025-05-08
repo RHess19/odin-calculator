@@ -44,12 +44,6 @@ body {
     gap: 10px;
 }
 
-.calculator-button-clear
-{
-    height: 80px;
-    width: 380px;
-}
-
 .calculator-button
 {
     width: 80px;
