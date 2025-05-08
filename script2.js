@@ -10,6 +10,7 @@ let equals; // True if equals was just pressed - keeps the screen from clearing 
 let message = document.querySelector(".message-container"); // Document element for displaying error messages
 let cleared;
 let charPressed;
+let lastInput;
 
 // Basic operation functions
 function add(a, b)
@@ -99,10 +100,18 @@ buttonsContainer.addEventListener("click", (event) => {
     // Operator
     else if(event.target.value === "+" || event.target.value === "-" || event.target.value === "X" || event.target.value === "/")
     {
+        if(lastInput === "+" || lastInput === "-" || lastInput === "X" || lastInput === "/") // Prevent pressing multiple operators in a row from resetting the calculation. Instead, store the new operator and wait until a nubmer is entered
+        {
+            operator = event.target.value;
+            return;
+        }
+
+
         if(!charPressed) // If no characters entered since the last operator entered...
         {
             operator = event.target.value;
             charPressed = false;
+            lastInput = event.target.value;
             return;
         }
         
@@ -115,6 +124,7 @@ buttonsContainer.addEventListener("click", (event) => {
             display.textContent = result;
             chaining = true;
             cleared = false;
+            lastInput = event.target.value;
         } else if(operand1 !== "" && operator !== "")
         {
             operand2 = display.textContent;
@@ -123,6 +133,7 @@ buttonsContainer.addEventListener("click", (event) => {
             display.textContent = result;
             chaining = true;
             cleared = false;
+            lastInput = event.target.value;
         }
         else
         {
@@ -130,6 +141,7 @@ buttonsContainer.addEventListener("click", (event) => {
             operator = event.target.value;
             clearDisplay();
             cleared = false;
+            lastInput = event.target.value;
         }
 
         
@@ -173,6 +185,7 @@ buttonsContainer.addEventListener("click", (event) => {
     // Number or decimal
     else
     {
+        lastInput = "";
         charPressed = true; // Keep track of when something othan than an operator is pressed - detects pressing multiple operators in a row without calculating anything
         if(equals === true) // Reset after reaching the bottom of the = conditional
         {
