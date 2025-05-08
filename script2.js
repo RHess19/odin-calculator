@@ -79,20 +79,22 @@ function roundResult() {
 const buttonsContainer = document.querySelector(".calculator-buttons-container");
 
 buttonsContainer.addEventListener("click", (event) => {
+    // Prevent from triggering on the container
+    if(event.target.className === "calculator-buttons-container")
+    {
+        return;
+    }
     roundResult();
     if(event.target.value === "." &&  display.textContent.indexOf(".") !== -1 && display.textContent !== "") // Do not allow multiple decimals in inputs
     {
         return;
     }
 
-    // Prevent from triggering on the container
-    if(event.target.className === "calculator-buttons-container")
+    if(event.target.value === "BACK"  && display.textContent.length !== 0)
     {
-        return;
+        display.textContent = display.textContent.slice(0, display.textContent.length-1)
     }
-
-
-    if(event.target.value === "CLEAR")
+    else if(event.target.value === "CLEAR")
     {
         clearDisplay();
         operand1 = "";
@@ -193,6 +195,10 @@ buttonsContainer.addEventListener("click", (event) => {
     // Number or decimal
     else
     {
+        if(event.target.value === "BACK")
+        {
+            return;
+        }
         if(display.textContent.length > 12)
         {
             display.textContent = display.textContent.slice(0, 12);
