@@ -6,6 +6,7 @@ let result = "";
 let display = document.querySelector(".calculator-display");
 display.textContent = "";
 let chaining;
+let equals; // True if equals was just pressed - keeps the screen from clearing when entering multidigit numbers
 
 // Basic operation functions
 function add(a, b)
@@ -81,6 +82,7 @@ buttonsContainer.addEventListener("click", (event) => {
         operand1 = "";
         operand2 = "";
         operator = "";
+        equals = false;
     }
     // Operator
     else if(event.target.value === "+" || event.target.value === "-" || event.target.value === "X" || event.target.value === "/")
@@ -143,11 +145,12 @@ buttonsContainer.addEventListener("click", (event) => {
         operator2 = "";
         chaining = "";
         result = "";
+        equals = true;
     }
     // Number or decimal
     else
     {
-        if(result === "") // Reset after reaching the bottom of the = conditional
+        if(equals === true) // Reset after reaching the bottom of the = conditional
         {
             clearDisplay();
         }
