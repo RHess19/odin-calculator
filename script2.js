@@ -65,6 +65,15 @@ function clearDisplay()
     display.textContent = "";
 }
 
+function roundResult()
+{
+    if(display.textContent.length > 12)
+    {
+        display.textContent = display.textContent.slice(0, 12);
+        message = "Result longer than 12 characters. Result has been truncated to 12 characters.";
+    }
+}
+
 
 
 
@@ -167,7 +176,11 @@ buttonsContainer.addEventListener("click", (event) => {
         charPressed = true; // Keep track of when something othan than an operator is pressed - detects pressing multiple operators in a row without calculating anything
         if(equals === true) // Reset after reaching the bottom of the = conditional
         {
-            clearDisplay();
+            if(!cleared) // Only clear the display on the FIRST time after an operator is pressed while chaining expressions
+            {
+                clearDisplay();
+                cleared = true;
+            }
             message = "";
             addCharToDisplay(event.target.value);
             return;
