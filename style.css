@@ -77,3 +77,13 @@ body {
 {
     background-color: lightgray;
 }
+
+#calculator-button-equals
+{
+    background-color: darkorange;
+}
+
+#calculator-button-equals:active
+{
+    background-color: rgb(218, 121, 11);
+}
