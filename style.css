@@ -21,17 +21,22 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background-color: rgb(79, 131, 114);
+    border-radius: 15px;
+    border: 3px solid rgb(52, 85, 74);
 }
 
 .calculator-display
 {
     width: 380px;
     height: 80px;
-    border: 1px solid black;
+    border: 3px solid black;
+    border-radius: 15px;
     margin-bottom: 20px;
     font-size: 60px;
     display: flex;
     align-items: center;
+    background-color: #EEEEEE;
 }
 
 .calculator-buttons-container
@@ -48,4 +53,27 @@ body {
 {
     width: 80px;
     height: 80px;
+    border-radius: 25px;
+    color: black;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 24px;
+}
+
+.calculator-button:active
+{
+    background-color: lightgray;
+}
+
+#calculator-button-1, #calculator-button-2, #calculator-button-3,
+#calculator-button-4, #calculator-button-5, #calculator-button-6,
+#calculator-button-7, #calculator-button-8, #calculator-button-9, #calculator-button-0
+{
+    background-color: gray;
+}
+
+#calculator-button-1, #calculator-button-2, #calculator-button-3,
+#calculator-button-4, #calculator-button-5, #calculator-button-6,
+#calculator-button-7, #calculator-button-8, #calculator-button-9, #calculator-button-0
+{
+    background-color: lightgray;
 }
